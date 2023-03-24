@@ -2,7 +2,7 @@
 
 Connexion à Gitpod :
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/CHANGE_ME/univ-smb-flask-full)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/sTOrM2202/univ-smb-flask-full)
 
 # Sites
 
