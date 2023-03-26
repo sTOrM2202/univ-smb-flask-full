@@ -53,4 +53,8 @@ ALTER TABLE load_balancers
 ADD CONSTRAINT fk_web_servers
 FOREIGN KEY (web_server_id) REFERENCES web_servers(id);
 
+CREATE USER 'louis'@localhost IDENTIFIED BY 'louis';
+GRANT ALL PRIVILEGES ON *.* TO 'louis'@'localhost';
+FLUSH PRIVILEGES;
+
 
