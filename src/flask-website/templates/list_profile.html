@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <h1>Bienvenue sur votre profil {{ user.username }}!</h1>
+    <ul>
+        <li>ID: {{ user.id }}</li>
+        <li>Nom: {{ user.firstname }}</li>
+        <li>Prénom: {{ user.lastname }}</li>
+        <li>Date de naissance: {{ user.birthdate }}</li>
+    </ul>
+{% endblock %}
