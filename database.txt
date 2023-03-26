@@ -58,3 +58,35 @@ GRANT ALL PRIVILEGES ON *.* TO 'louis'@'localhost';
 FLUSH PRIVILEGES;
 
 
+USE identity;
+
+INSERT INTO users (username, password, firstname, lastname, birthdate)
+VALUES ('pernetlo', 'pernetlo', 'Louis', 'Pernet', '2002-02-22');
+SET @user_id = LAST_INSERT_ID();
+INSERT INTO auth (user_id, token, expiration)
+VALUES (@user_id, 'token', NOW() + INTERVAL 1 DAY);
+
+INSERT INTO users (username, password, firstname, lastname, birthdate)
+VALUES ('dupontpa', 'dupontpa', 'Paul', 'Dupont', '1995-05-15');
+SET @user_id = LAST_INSERT_ID();
+INSERT INTO auth (user_id, token, expiration)
+VALUES (@user_id, 'token', NOW() + INTERVAL 1 DAY);
+
+INSERT INTO users (username, password, firstname, lastname, birthdate)
+VALUES ('martinje', 'martinje', 'Jeanne', 'Martin', '1987-11-07');
+SET @user_id = LAST_INSERT_ID();
+INSERT INTO auth (user_id, token, expiration)
+VALUES (@user_id, 'token', NOW() + INTERVAL 1 DAY);
+
+INSERT INTO users (username, password, firstname, lastname, birthdate)
+VALUES ('leroyal', 'leroyal', 'Alice', 'Leroy', '1976-03-28');
+SET @user_id = LAST_INSERT_ID();
+INSERT INTO auth (user_id, token, expiration)
+VALUES (@user_id, 'token', NOW() + INTERVAL 1 DAY);
+
+INSERT INTO users (username, password, firstname, lastname, birthdate)
+VALUES ('roussecl', 'roussecl', 'Claire', 'Rousseau', '1990-09-12');
+SET @user_id = LAST_INSERT_ID();
+INSERT INTO auth (user_id, token, expiration)
+VALUES (@user_id, 'token', NOW() + INTERVAL 1 DAY);
+
