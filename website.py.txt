@@ -1,0 +1,47 @@
+from flask import Flask, render_template, request, redirect, url_for, make_response
+import requests
+
+app = Flask(__name__)
+
+@app.route("/")
+def start():
+    return render_template('login.html')
+
+@app.route("/login")
+def login():
+    # Récupération du formulaire de connexion
+    username = request.args.get('username')
+    password = request.args.get('password')
+
+    # Requête vers l'API pour vérification des informations
+    r = requests.get('http://localhost:5000/login', params={'username': username, 'password': password})
+    response = r.json()
+
+    # Si l'authentification est réussie, redirection vers la page "layout" avec un cookie contenant l'username
+    if response['authenticated']:
+        resp = make_response(redirect(url_for('layout')))
+        resp.set_cookie('username', username)
+        return resp
+    # Sinon, retour à la page de connexion
+    else:
+        return render_template("login.html", error="login ou mot de passe incorrect")
+
+
+@app.route("/layout")
+def layout():
+    # Récupération de l'username
+    username = request.cookies.get('username')
+    return render_template('layout.html', username=username)
+
+
+@app.route("/info")
+def info():
+    # Récupération de l'username dans les cookies
+    username = request.args.get('username')
+
+    # Requête vers l'API pour récupérer les informations de l'utilisateur
+    r = requests.get('http://localhost:5000/info', params={'username': username})
+    user = r.json()
+
+    # Affichage des informations de l'utilisateur
+    return render_template("info.html", user=user)
