@@ -29,9 +29,36 @@ def login():
     if user and user[2] == password:
         # Utilisateur authentifié
         response = {'authenticated': True}
+        status_code = 200
     else:
         # Nom d'utilisateur ou mot de passe incorrect
-        response = {'authenticated': False}
+        response = {'authenticated': False, 'error': 'Nom d\'utilisateur ou mot de passe incorrect'}
+        status_code = 401
+    
+    # Fermeture du curseur
+    cur.close()
     
     # Retourne la réponse au format JSON à l'application Flask appelante
+    return jsonify(response), status_code
+
+
+@app.route("/identity/<username>")
+def identity(username):
+    # Connexion à la base de données
+    cur = mysql.connection.cursor()
+
+    # Récupération de l'utilisateur correspondant au nom d'utilisateur
+    cur.execute("SELECT * FROM users WHERE username='%s'", (username,))
+    user = cur.fetchone()
+
+    # Fermeture du curseur
+    cur.close()
+
+    # Si l'utilisateur existe, on renvoie ses informations, sinon une erreur
+    if user:
+        response = {'id': user[0], 'username': user[1], 'password': user[2], 'firstname': user[3], 'lastname': user[4], 'birthdate': str(user[5])}
+    else:
+        response = {'error': 'Utilisateur non trouvé'}
+    # Retourne la réponse au format JSON à l'application Flask appelante
     return jsonify(response)
+
