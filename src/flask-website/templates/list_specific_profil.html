@@ -1,0 +1,46 @@
+<!-- {% extends "layout.html" %}
+
+{% block title %}Profil utilisateur{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <title>Web Configurator > Profil utilisateur</title>
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('start') }}">Home {{ user.username }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profil utilisateur</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
+    <h1>Profil de l'utilisateur {{ username }}</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            {% if user.username == username %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.birthdate }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %} -->

@@ -2,7 +2,24 @@
 
 {% block title %}Profile{% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <title>Web Configurator > Liste Profile</title>
+{% endblock %}
+
 {% block content %}
+    <section>
+        <div class="container">
+            <div class="row">
+                <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url_for('start') }}">Home {{ user.username }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Liste Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </section>
     <h1>Bienvenue sur votre profil {{ user.username }}!</h1>
     <ul>
         <li>ID: {{ user.id }}</li>

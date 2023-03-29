@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, request, jsonify
 from flask_mysqldb import MySQL
 
@@ -44,11 +45,14 @@ def login():
 
 @app.route("/identity/<username>")
 def identity(username):
+    # Affichage d'un message de débogage
+    print(f"Requête reçue pour l'utilisateur {username}")
+
     # Connexion à la base de données
     cur = mysql.connection.cursor()
 
     # Récupération de l'utilisateur correspondant au nom d'utilisateur
-    cur.execute("SELECT * FROM users WHERE username='%s'", (username,))
+    cur.execute("SELECT * FROM users WHERE username=%s", (username,))
     user = cur.fetchone()
 
     # Fermeture du curseur
@@ -62,3 +66,23 @@ def identity(username):
     # Retourne la réponse au format JSON à l'application Flask appelante
     return jsonify(response)
 
+@app.route("/users")
+def users():
+    # Connexion à la base de données
+    cur = mysql.connection.cursor()
+
+    # Récupération de tous les utilisateurs
+    cur.execute("SELECT * FROM users")
+    users = cur.fetchall()
+
+    # Fermeture du curseur
+    cur.close()
+
+    # Création d'une liste contenant les informations de chaque utilisateur
+    user_list = []
+    for user in users:
+        user_data = {'id': user[0], 'username': user[1], 'password': user[2], 'firstname': user[3], 'lastname': user[4], 'birthdate': str(user[5])}
+        user_list.append(user_data)
+
+    # Retourne la liste des utilisateurs au format JSON à l'application Flask appelante
+    return jsonify(user_list)
