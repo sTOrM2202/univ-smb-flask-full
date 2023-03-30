@@ -90,3 +90,9 @@ SET @user_id = LAST_INSERT_ID();
 INSERT INTO auth (user_id, token, expiration)
 VALUES (@user_id, 'token', NOW() + INTERVAL 1 DAY);
 
+use config_generator;
+INSERT INTO reverse_proxies (name, ip_address, port) VALUES ('rp-1', '192.168.0.1.', 8081);
+INSERT INTO reverse_proxies (name, ip_address, port) VALUES ('rp-2', '192.168.0.2.', 8082);
+INSERT INTO reverse_proxies (name, ip_address, port) VALUES ('rp-3', '192.168.0.3.', 8083);
+INSERT INTO reverse_proxies (name, ip_address, port) VALUES ('rp-4', '192.168.0.4.', 8084);
+
