@@ -26,9 +26,6 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('login') }}">Se Connecter</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="{{ url_for('start') }}">Accueil</a>
-                        </li>
                         {% endif %}
                         {% if 'username' in session %}
                         <li class="nav-item">
@@ -37,12 +34,15 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('list_profile') }}">Liste Profile</a>
                         </li>  
-                        
-                        <!-- Rajouter la route pour lister les user spécifiques -->
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('list_specific_profil', username=user.username) if user is defined else '#' }}">Liste specific</a>
+                        </li>  
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('list_all') }}">Liste All</a>
-                        </li>  
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('rp_list') }}">Reverse Proxies</a>
+                        </li>                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('logout') }}">Se déconnecter</a>
                         </li>

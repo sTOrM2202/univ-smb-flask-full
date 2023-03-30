@@ -7,7 +7,6 @@ app = Flask(__name__)
 # Configuration de la base de données
 app.config['MYSQL_USER'] = 'louis'
 app.config['MYSQL_PASSWORD'] = 'louis'
-app.config['MYSQL_DB'] = 'identity'
 app.config['MYSQL_HOST'] = 'localhost'
 
 # Initialisation de la connexion à la base de données
@@ -23,6 +22,7 @@ def login():
     cur = mysql.connection.cursor()
     
     # Récupération de l'utilisateur correspondant au nom d'utilisateur
+    cur.execute("use identity")
     cur.execute("SELECT * FROM users WHERE username=%s", (username,))
     user = cur.fetchone()
     
@@ -52,6 +52,7 @@ def identity(username):
     cur = mysql.connection.cursor()
 
     # Récupération de l'utilisateur correspondant au nom d'utilisateur
+    cur.execute("use identity")
     cur.execute("SELECT * FROM users WHERE username=%s", (username,))
     user = cur.fetchone()
 
@@ -72,6 +73,7 @@ def users():
     cur = mysql.connection.cursor()
 
     # Récupération de tous les utilisateurs
+    cur.execute("use identity")
     cur.execute("SELECT * FROM users")
     users = cur.fetchall()
 
@@ -86,3 +88,53 @@ def users():
 
     # Retourne la liste des utilisateurs au format JSON à l'application Flask appelante
     return jsonify(user_list)
+
+
+@app.route("/rp/list")
+def rp_list():
+    id_rp = request.args.get('id_rp') # Récupération de l'id du RP passé en paramètre
+    # Connexion à la base de données
+    cur = mysql.connection.cursor()
+
+    # Si l'id du RP est fourni en paramètre, récupération des informations seulement pour ce RP
+    if id_rp:
+        cur.execute("use config_generator")
+        cur.execute("SELECT * FROM reverse_proxies WHERE id=%s", (id_rp,))
+        rp_data = cur.fetchone()
+        if rp_data:
+            rp_list = [{'id': rp_data[0], 'name': rp_data[1], 'ip_address': rp_data[2], 'port': rp_data[3]}]
+        else:
+            rp_list = []
+    else:
+        # Sinon, récupération de tous les reverse proxies
+        cur.execute("use config_generator")
+        cur.execute("SELECT * FROM reverse_proxies")
+        rp_list = []
+        for rp in cur.fetchall():
+            rp_data = {'id': rp[0], 'name': rp[1], 'ip_address': rp[2], 'port': rp[3]}
+            rp_list.append(rp_data)
+
+    # Fermeture du curseur
+    cur.close()
+
+    # Retourne la liste des reverse proxies au format JSON à l'application Flask appelante
+    return jsonify(rp_list)
+
+@app.route("/rp/delete/<int:id_rp>", methods=["DELETE"])
+def rp_delete(id_rp):
+    # Connexion à la base de données
+    cur = mysql.connection.cursor()
+
+    # Suppression du reverse proxy correspondant à l'identifiant fourni
+    cur.execute("use config_generator")
+    cur.execute("DELETE FROM reverse_proxies WHERE id=%s", (id_rp,))
+    mysql.connection.commit()
+
+    # Fermeture du curseur
+    cur.close()
+
+    # Retourne une réponse pour indiquer que la suppression a réussi
+    response = {'message': f'Suppression du reverse proxy {id_rp} réussie'}
+    return jsonify(response)
+
+

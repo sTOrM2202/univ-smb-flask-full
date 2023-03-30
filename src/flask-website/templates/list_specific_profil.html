@@ -1,4 +1,4 @@
-<!-- {% extends "layout.html" %}
+{% extends "layout.html" %}
 
 {% block title %}Profil utilisateur{% endblock %}
 
@@ -20,7 +20,13 @@
             </div>
         </div>
     </section>
-    <h1>Profil de l'utilisateur {{ username }}</h1>
+    <h1>Profil de l'utilisateur {{ user.username }}</h1>
+    <form action="{{ url_for('search_specific_profil') }}" method="POST">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Username" name="username" required>
+            <button class="btn btn-primary" type="submit">Chercher</button>
+        </div>
+    </form>
     <table class="table">
         <thead>
             <tr>
@@ -31,16 +37,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for user in users %}
-            {% if user.username == username %}
             <tr>
                 <td>{{ user.id }}</td>
                 <td>{{ user.firstname }}</td>
                 <td>{{ user.lastname }}</td>
                 <td>{{ user.birthdate }}</td>
             </tr>
-            {% endif %}
-            {% endfor %}
         </tbody>
     </table>
-{% endblock %} -->
+{% endblock %}
