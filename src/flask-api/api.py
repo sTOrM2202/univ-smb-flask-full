@@ -137,4 +137,25 @@ def rp_delete(id_rp):
     response = {'message': f'Suppression du reverse proxy {id_rp} réussie'}
     return jsonify(response)
 
+@app.route("/rp/create", methods=["POST"])
+def rp_create():
+    # Récupération des informations du reverse proxy envoyées depuis website.py
+    rp_name = request.json.get('name')
+    rp_ip = request.json.get('ip_address')
+    rp_port = request.json.get('port')
+    
+    # Connexion à la base de données
+    cur = mysql.connection.cursor()
+
+    # Insertion du reverse proxy dans la base de données
+    cur.execute("use config_generator")
+    cur.execute("INSERT INTO reverse_proxies (name, ip_address, port) VALUES (%s, %s, %s)", (rp_name, rp_ip, rp_port))
+    mysql.connection.commit()
+
+    # Fermeture du curseur
+    cur.close()
+
+    # Retourne une réponse pour indiquer que la création a réussi
+    response = {'message': f'Création du reverse proxy {rp_name} réussie'}
+    return jsonify(response)
 

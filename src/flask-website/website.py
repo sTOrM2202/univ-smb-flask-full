@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, abort, flash
 import requests
 
 app = Flask(__name__)
@@ -126,14 +126,14 @@ def rp_list():
     else:
         return f"Erreur lors de la récupération des informations des reverse proxies : {response.status_code}"
 
+
 @app.route('/rp/delete/<int:id_rp>', methods=['POST', 'DELETE'])
 def delete_rp(id_rp):
-    # Vérification que l'utilisateur est connecté
-    if 'username' not in session:
-        return redirect(url_for('login'))
+    if request.method == 'POST':
+        # Vérification que l'utilisateur est connecté
+        if 'username' not in session:
+            return redirect(url_for('login'))
 
-    # Vérification de la méthode HTTP
-    if request.method == 'DELETE':
         # Envoi de la demande de suppression à l'API
         api_url = f'http://localhost:5000/rp/delete/{id_rp}'
         response = requests.delete(api_url)
@@ -146,9 +146,47 @@ def delete_rp(id_rp):
 
         # Redirection vers la liste des reverse proxies
         return redirect(url_for('rp_list'))
+
     else:
-        # Méthode HTTP non autorisée
-        abort(405)
+        # La méthode HTTP DELETE a été utilisée, on traite directement la suppression
+        # Envoi de la demande de suppression à l'API
+        api_url = f'http://localhost:5000/rp/delete/{id_rp}'
+        response = requests.delete(api_url)
+
+        # Vérification que la requête a réussi
+        if response.status_code == 200:
+            flash('Le reverse proxy a été supprimé avec succès.', 'success')
+        else:
+            flash(f'Erreur lors de la suppression du reverse proxy : {response.status_code}', 'error')
+
+        # Redirection vers la liste des reverse proxies
+        return redirect(url_for('rp_list'))
+
+@app.route('/rp/create', methods=['GET', 'POST'])
+def create_rp():
+    # Vérification que l'utilisateur est connecté
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        # Récupération des données du formulaire
+        rp_name = request.form['name']
+        rp_ip_address = request.form['ip_address']
+        rp_port = request.form['port']
+
+        # Envoi des données à l'API pour création du RP
+        api_url = 'http://localhost:5000/rp/create'
+        rp_data = {'name': rp_name, 'ip_address': rp_ip_address, 'port': rp_port}
+        response = requests.post(api_url, json=rp_data)
+
+        # Vérification que la requête a réussi
+        if response.status_code == 200:
+            flash('Le reverse proxy a été créé avec succès.', 'success')
+            return redirect(url_for('rp_list'))
+        else:
+            flash(f'Erreur lors de la création du reverse proxy : {response.status_code}', 'error')
+
+    return render_template('create_rp.html')
 
 
 
