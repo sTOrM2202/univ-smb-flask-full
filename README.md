@@ -29,3 +29,24 @@ Démarrage du Site Web WebSite :
 Le mot de passe est dans le fichier de base de données.
 
 `sudo mysql -u root -p`
+
+## Avancé du projet
+
+Pour la partie utilisateur nous pouvons tout faire. CAD
+-	Une authentification
+-	Lister son profil 
+-	Lister tout les profils
+- Lister un profil spécifique
+
+Pour la partie Serveur. J'ai fais que les Reverse Proxi
+- Nous pouvons lister les RP
+- Nous pouvons Supprimer un RP en fonction de son ID
+- Nous pouvons créer un RP en fonction
+
+Pour importer la BDD voir databases.txt
+
+Merci à vous pour le projet.
+
+
+
+
